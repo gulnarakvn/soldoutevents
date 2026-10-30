@@ -83,6 +83,13 @@ section .head{display:grid;gap:8px;margin-bottom:24px}
 .gallery img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:var(--stub)}
 .gallery figcaption{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 @media (max-width:620px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gallery .wide{grid-column:1/-1}
+.collage{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:12px;aspect-ratio:2/1}
+.collage img{aspect-ratio:auto;height:100%;min-height:0}
+.collage img:first-child{grid-row:1/3}
+.contacts a{color:inherit;font-weight:600;text-decoration-color:var(--gold);text-underline-offset:3px}
+@media (max-width:620px){.gallery .first{grid-column:1/-1}.gallery .first img{aspect-ratio:4/3;object-position:50% 40%}.collage{aspect-ratio:4/3}}
+
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:s}
 .steps li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;counter-increment:s}
 .steps li::before{content:counter(s);font-family:var(--mono);width:32px;height:32px;border-radius:50%;background:var(--wine);color:var(--gold);display:grid;place-items:center;font-size:.85rem}
@@ -111,7 +118,7 @@ footer .ph{color:var(--warn-fg)}
       </svg>
       <span>SOLD OUT</span>
     </a>
-    <a class="btn ghost" href="#contacts">Связаться</a>
+    <a class="btn ghost" href="https://t.me/sashumilina" target="_blank" rel="noopener">Связаться</a>
   </div></header>
 
   <div class="wrap" id="top">
@@ -121,7 +128,7 @@ footer .ph{color:var(--warn-fg)}
         <h1>Билетов нет? <em>У нас есть.</em></h1>
         <p class="lead">Подбираем билеты на концерты, спортивные и другие мероприятия в России и за рубежом. Можем собрать всю поездку: перелёт, отель, трансфер и сами билеты.</p>
         <div class="actions">
-          <a class="btn" href="#contacts">Оставить заявку</a>
+          <a class="btn" href="https://t.me/sashumilina" target="_blank" rel="noopener">Оставить заявку</a>
           <a class="btn ghost" href="#services">Услуги</a>
         </div>
       </div>
@@ -158,12 +165,14 @@ footer .ph{color:var(--warn-fg)}
   <section id="events">
     <div class="head"><span class="label">Где мы были</span><h2>Наши события</h2></div>
     <div class="gallery">
-      <figure><img src="photo-1.jpg" alt="Концерт на большой арене" loading="lazy" width="560" height="700"><figcaption>Концерт</figcaption></figure>
+      <figure class="first"><img src="photo-1.jpg" alt="Концерт на большой арене" loading="lazy" width="560" height="700"><figcaption>Концерт</figcaption></figure>
       <figure><img src="photo-2.jpg" alt="Турнир по единоборствам" loading="lazy" width="560" height="700"><figcaption>Единоборства</figcaption></figure>
       <figure><img src="photo-3.jpg" alt="Теннисный турнир на грунтовом корте" loading="lazy" width="560" height="700"><figcaption>Теннис</figcaption></figure>
-      <figure><img src="photo-4.jpg" alt="Баскетбольный матч, места у площадки" loading="lazy" width="560" height="700"><figcaption>Баскетбол</figcaption></figure>
-      <figure><img src="photo-5.jpg" alt="Баскетбольный матч на арене" loading="lazy" width="560" height="700"><figcaption>Баскетбол</figcaption></figure>
-      <figure><img src="photo-6.jpg" alt="Баскетбольный матч, вид с трибуны" loading="lazy" width="560" height="700"><figcaption>Баскетбол</figcaption></figure>
+      <figure class="wide"><div class="collage">
+        <img src="photo-4.jpg" alt="Баскетбольный матч, места у площадки" loading="lazy" width="560" height="700">
+        <img src="photo-5.jpg" alt="Баскетбольный матч на арене" loading="lazy" width="560" height="700">
+        <img src="photo-6.jpg" alt="Баскетбольный матч, вид с трибуны" loading="lazy" width="560" height="700">
+      </div><figcaption>Баскетбол</figcaption></figure>
     </div>
   </section>
 
@@ -188,7 +197,7 @@ footer .ph{color:var(--warn-fg)}
   <section id="contacts">
     <div class="head"><span class="label">Контакты</span><h2>Оставить заявку</h2></div>
     <div class="contacts">
-      <div class="row"><span class="label">Telegram</span><span>@sashumilina</span></div>
+      <div class="row"><span class="label">Telegram</span><a href="https://t.me/sashumilina" target="_blank" rel="noopener">@sashumilina</a></div>
       <div class="row"><span class="label">Телефон</span><span>+7 911 209-98-88</span></div>    </div>
   </section>
 </main>

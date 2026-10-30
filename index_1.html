@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sold Out — билеты на мероприятия и выезды под ключ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: full-width burgundy hero band holding a ticket card with a perforated stub; quiet light sections below */
+:root{
+  --bg:#f7f2ef; --surface:#ffffff; --ink:#1c1416; --muted:#6e5a5f; --line:#e8dcda;
+  --wine:#5e1a2b; --wine-ink:#f7f2ef; --gold:#d9b98a; --gold-ink:#1c1416; --stub:#f2e8e3;
+  --warn-bg:#fff1c9; --warn-fg:#6b4e00;
+  --display:"Unbounded",system-ui,sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#150c0f; --surface:#21141a; --ink:#f3e9e6; --muted:#b9a2a6; --line:#3a242b;
+  --wine:#6e2033; --wine-ink:#f7f2ef; --gold:#e0c497; --gold-ink:#1c1416; --stub:#2b1a21;
+  --warn-bg:#3a3010; --warn-fg:#f3dc8f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#150c0f; --surface:#21141a; --ink:#f3e9e6; --muted:#b9a2a6; --line:#3a242b;
+  --wine:#6e2033; --wine-ink:#f7f2ef; --gold:#e0c497; --gold-ink:#1c1416; --stub:#2b1a21;
+  --warn-bg:#3a3010; --warn-fg:#f3dc8f; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.2;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.3rem,3.5vw,1.7rem);font-weight:700}
+h3{font-size:1rem;font-weight:500}
+p{margin:0}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ph{background:var(--warn-bg);color:var(--warn-fg);border-radius:4px;padding:0 .3em}
+
+.draft{background:var(--warn-bg);color:var(--warn-fg);font-size:.85rem;text-align:center}
+.draft .wrap{padding-block:10px}
+
+/* hero band */
+.band{background:var(--wine);color:var(--wine-ink)}
+.band .label{color:var(--gold)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:20px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;color:var(--wine-ink);text-decoration:none}
+.logo svg{width:40px;height:28px;flex:none}
+.logo span{font-family:var(--display);font-weight:800;font-size:1.15rem;letter-spacing:.04em}
+.btn{display:inline-block;background:var(--gold);color:var(--gold-ink);text-decoration:none;font-weight:700;padding:12px 20px;border-radius:999px;font-size:.95rem}
+.btn:focus-visible{outline:3px solid var(--wine-ink);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--wine-ink);border:1.5px solid color-mix(in srgb,var(--wine-ink) 40%,transparent)}
+
+.ticket{display:grid;grid-template-columns:1fr auto;background:var(--surface);color:var(--ink);border-radius:18px;overflow:hidden;margin-block:8px 0;transform:translateY(40px);box-shadow:0 18px 40px -20px rgba(0,0,0,.45)}
+.ticket .main{padding:32px 28px;display:grid;gap:16px;min-width:0}
+.ticket .label{color:var(--muted)}
+.ticket h1{font-size:clamp(1.6rem,5vw,2.5rem);font-weight:700}
+.ticket h1 em{font-style:normal;color:var(--wine)}
+:root[data-theme="dark"] .ticket h1 em{color:var(--gold)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ticket h1 em{color:var(--gold)}}
+.ticket .lead{color:var(--muted);max-width:52ch}
+.ticket .actions{display:flex;gap:10px;flex-wrap:wrap}
+.ticket .btn{background:var(--wine);color:var(--wine-ink)}
+.ticket .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.ticket .btn:focus-visible{outline-color:var(--ink)}
+.stub{background:var(--stub);border-left:2px dashed var(--line);padding:28px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;min-width:150px}
+.stub .row{display:grid;gap:2px}
+.stub .val{font-family:var(--mono);font-size:.9rem}
+@media (max-width:620px){
+  .ticket{grid-template-columns:1fr}
+  .stub{border-left:0;border-top:2px dashed var(--line);flex-direction:row;flex-wrap:wrap;min-width:0}
+}
+.spacer{height:72px}
+
+section{padding-block:36px;border-top:1px solid var(--line)}
+section.first{border-top:0}
+section .head{display:grid;gap:8px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:10px;align-content:start}
+.card ul{margin:0;padding-left:1.1em;color:var(--muted)}
+.card li::marker{color:var(--gold)}
+
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gallery figure{margin:0;display:grid;gap:8px;min-width:0}
+.gallery img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:var(--stub)}
+.gallery figcaption{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:620px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--mono);width:32px;height:32px;border-radius:50%;background:var(--wine);color:var(--gold);display:grid;place-items:center;font-size:.85rem}
+.steps p{color:var(--muted)}
+
+.pay{display:grid;gap:10px;max-width:60ch}
+.contacts{display:grid;gap:10px}
+.contacts .row{display:flex;gap:12px;flex-wrap:wrap;align-items:baseline}
+.contacts .row .label{min-width:90px}
+
+footer{background:var(--wine);color:color-mix(in srgb,var(--wine-ink) 80%,transparent);font-size:.85rem;margin-top:24px}
+footer .wrap{padding-block:24px;display:grid;gap:4px}
+footer .ph{color:var(--warn-fg)}
+</style>
+</head>
+<body>
+
+
+<div class="band">
+  <header><div class="wrap">
+    <a class="logo" href="#top" aria-label="Sold Out">
+      <svg viewBox="0 0 40 28" aria-hidden="true">
+        <path fill="var(--gold)" d="M4 0h32a4 4 0 0 1 4 4v6a4 4 0 0 0 0 8v6a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4v-6a4 4 0 0 0 0-8V4a4 4 0 0 1 4-4z"/>
+        <path stroke="var(--wine)" stroke-width="1.6" stroke-dasharray="2 2.2" d="M27 3v22"/>
+        <path fill="var(--wine)" d="M9 10.5h12v2H9zM9 15.5h8v2H9z"/>
+      </svg>
+      <span>SOLD OUT</span>
+    </a>
+    <a class="btn ghost" href="#contacts">Связаться</a>
+  </div></header>
+
+  <div class="wrap" id="top">
+    <div class="ticket">
+      <div class="main">
+        <span class="label">Консьерж-сервис · события и поездки</span>
+        <h1>Билетов нет? <em>У нас есть.</em></h1>
+        <p class="lead">Подбираем билеты на концерты, спортивные и другие мероприятия в России и за рубежом. Можем собрать всю поездку: перелёт, отель, трансфер и сами билеты.</p>
+        <div class="actions">
+          <a class="btn" href="#contacts">Оставить заявку</a>
+          <a class="btn ghost" href="#services">Услуги</a>
+        </div>
+      </div>
+      <div class="stub" aria-label="Кратко">
+        <div class="row"><span class="label">Формат</span><span class="val">Под ключ</span></div>
+        <div class="row"><span class="label">География</span><span class="val">Россия и мир</span></div>
+        <div class="row"><span class="label">Оплата</span><span class="val">По договору</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="spacer"></div>
+
+<main class="wrap">
+  <section id="services" class="first">
+    <div class="head"><span class="label">Услуги</span><h2>Что мы делаем</h2></div>
+    <div class="grid">
+      <div class="card">
+        <h3>Билеты на мероприятия</h3>
+        <p>Находим и оформляем билеты на нужное событие.</p>
+        <ul><li>Концерты и шоу</li><li>Спортивные события</li><li>Фестивали и другие события</li></ul>
+      </div>
+      <div class="card">
+        <h3>Выезд под ключ</h3>
+        <p>Организуем поездку на мероприятие целиком.</p>
+        <ul><li>Авиабилеты</li><li>Бронирование отеля</li><li>Трансфер</li><li>Билеты на событие</li></ul>
+      </div>
+      <div class="card">
+        <h3>Сопровождение</h3>
+        <p>Остаёмся на связи до конца поездки и решаем вопросы по ходу.</p>      </div>
+    </div>
+  </section>
+
+  <section id="events">
+    <div class="head"><span class="label">Где мы были</span><h2>Наши события</h2></div>
+    <div class="gallery">
+      <figure><img src="photo-1.jpg" alt="Концерт на большой арене" loading="lazy" width="560" height="700"><figcaption>Концерт</figcaption></figure>
+      <figure><img src="photo-2.jpg" alt="Турнир по единоборствам" loading="lazy" width="560" height="700"><figcaption>Единоборства</figcaption></figure>
+      <figure><img src="photo-3.jpg" alt="Теннисный турнир на грунтовом корте" loading="lazy" width="560" height="700"><figcaption>Теннис</figcaption></figure>
+      <figure><img src="photo-4.jpg" alt="Баскетбольный матч, места у площадки" loading="lazy" width="560" height="700"><figcaption>Баскетбол</figcaption></figure>
+      <figure><img src="photo-5.jpg" alt="Баскетбольный матч на арене" loading="lazy" width="560" height="700"><figcaption>Баскетбол</figcaption></figure>
+      <figure><img src="photo-6.jpg" alt="Баскетбольный матч, вид с трибуны" loading="lazy" width="560" height="700"><figcaption>Баскетбол</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="head"><span class="label">Порядок работы</span><h2>Как проходит заказ</h2></div>
+    <ol class="steps">
+      <li><div><h3>Заявка</h3><p>Вы пишете, куда и на какое событие хотите поехать, даты и бюджет.</p></div></li>
+      <li><div><h3>Предложение</h3><p>Присылаем варианты билетов, перелёта и отеля с итоговой стоимостью.</p></div></li>
+      <li><div><h3>Договор и оплата</h3><p>Заключаем договор, выставляем счёт на оплату на расчётный счёт ИП.</p></div></li>
+      <li><div><h3>Оформление</h3><p>Покупаем билеты, бронируем отель и отправляем вам все документы.</p></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="head"><span class="label">Стоимость и оплата</span><h2>Сколько стоит</h2></div>
+    <div class="pay">
+      <p>Стоимость рассчитывается индивидуально под каждый запрос — напишите нам, и мы пришлём расчёт.</p>
+      <p>Работаем по договору. Оплата по счёту на расчётный счёт ИП.</p>
+    </div>
+  </section>
+
+  <section id="contacts">
+    <div class="head"><span class="label">Контакты</span><h2>Оставить заявку</h2></div>
+    <div class="contacts">
+      <div class="row"><span class="label">Telegram</span><span>@sashumilina</span></div>
+      <div class="row"><span class="label">Телефон</span><span>+7 911 209-98-88</span></div>    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span>SOLD OUT · ИП Шумилина Снежана Александровна</span>
+  <span>ИНН 236100641878 · ОГРНИП 326237500465912</span>
+</div></footer>
+</body>
+</html>
